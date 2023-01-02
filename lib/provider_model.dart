@@ -199,7 +199,7 @@ class SnmpModel extends ChangeNotifier {
       model = result;
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('model', model);
-      // print('model is ${model}');
+      print('model is ${model}');
       notifyListeners();
       return result;
 
@@ -207,7 +207,7 @@ class SnmpModel extends ChangeNotifier {
       model = 'No Compatible Network Switch Found';
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('model', model);
-      // print(model);
+      print(model);
       notifyListeners();
       return 'No Compatible Network Switch Found';
     }
@@ -272,7 +272,7 @@ class SnmpModel extends ChangeNotifier {
          var data = payload.pdu.varbinds[0].toString();
          String result = data.substring(data.indexOf(':')+2);  //Removes everything after first ':'
          portStatus.add(int.parse(result));
-         // print('portStaus = ${portStatus}');
+         print('portStatus = ${portStatus}');
        }
        //  Determine TX and RX Count
 

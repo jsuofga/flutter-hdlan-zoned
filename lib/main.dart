@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         backgroundColor: Color(0xFF2c3e50),
         actions: [
-          Text('v4.18.22'),
+          Text('V1.2.23'),
           TextButton.icon(
               onPressed: () {
                  showSettingsPanel();
