@@ -5,6 +5,8 @@ import 'package:hdlan_controller/screens/settings/admin_access.dart';
 import 'package:hdlan_controller/screens/settings/settings_menu.dart';
 import 'package:hdlan_controller/screens/home.dart';
 import 'package:hdlan_controller/screens/zones.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:hdlan_controller/class_models.dart';
 
 void main() {
   runApp(const MyApp()
@@ -80,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         backgroundColor: Color(0xFF2c3e50),
         actions: [
-          Text('V1.2.23'),
+          Text('V1.20.23'),
           TextButton.icon(
               onPressed: () {
                  showSettingsPanel();
@@ -97,7 +99,41 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Color(0xFF000000),
       resizeToAvoidBottomInset: true,
       body: Provider.of<UserInterfaceModel>(context).showHome ? Home() : Zones(),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:Provider.of<UserInterfaceModel>(context).showHome ?SpeedDial(
+        backgroundColor: Colors.blue ,
+        icon: Icons.power,
+        children: [
+          SpeedDialChild(
+              child: Icon(Icons.power,color: Colors.white,),
+            backgroundColor: Colors.green,
+            labelBackgroundColor: Colors.green,
+            labelStyle: TextStyle(color: Colors.white),
+            label: 'PoE On',
+            onTap: () async{
+              String ip =  await Provider.of<SwitchingModel>(context,listen: false).getIPAddressMDFSwitch();
+              String tx_rx_total = await (Provider.of<SnmpModel>(context,listen: false).txCount + Provider.of<SnmpModel>(context,listen: false).rxCount).toString();
+              CiscoSmbSwitch(ipAddress: ip).poe_power({'range':'1-${tx_rx_total}', 'powerInline_type':'auto' });
+
+            }
+              
+          ),
+          SpeedDialChild(
+              child: Icon(Icons.power),
+              backgroundColor: Colors.red,
+              labelBackgroundColor: Colors.red,
+              labelStyle: TextStyle(color: Colors.white),
+              label: 'PoE Off',
+              onTap: () async {
+                String ip =  await Provider.of<SwitchingModel>(context,listen: false).getIPAddressMDFSwitch();
+                String tx_rx_total = await (Provider.of<SnmpModel>(context,listen: false).txCount + Provider.of<SnmpModel>(context,listen: false).rxCount).toString();
+                CiscoSmbSwitch(ipAddress: ip).poe_power({'range':'1-${tx_rx_total}', 'powerInline_type':'never' });
+
+              },
+
+          )
+        ],
+
+      ): FloatingActionButton(
         backgroundColor: Colors.orange,
         onPressed: (){
           Provider.of<UserInterfaceModel>(context,listen: false).showHomeScreen();

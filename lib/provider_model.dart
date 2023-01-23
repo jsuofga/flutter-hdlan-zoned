@@ -272,7 +272,7 @@ class SnmpModel extends ChangeNotifier {
          var data = payload.pdu.varbinds[0].toString();
          String result = data.substring(data.indexOf(':')+2);  //Removes everything after first ':'
          portStatus.add(int.parse(result));
-         print('portStatus = ${portStatus}');
+        // print('portStatus = ${portStatus}');
        }
        //  Determine TX and RX Count
 

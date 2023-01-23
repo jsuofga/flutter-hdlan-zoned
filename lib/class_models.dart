@@ -104,6 +104,29 @@ class CiscoSmbSwitch{
     socket.close();
   }
 
+   // PoE on/off
+  void poe_power(Map payload) async {
+
+    Socket socket = await Socket.connect(ipAddress, telnetPort);
+    print(ipAddress);
+    // socket.write('$username\r');
+    socket.write('octava\r');
+    sleep(new Duration(milliseconds: 200));
+    // socket.write('$password\r');
+    socket.write('sg300-octava\r');
+    sleep(new Duration(milliseconds: 200));
+    socket.write('config\r');
+    sleep(new Duration(milliseconds: 200));
+    socket.write('interface range gi${payload['range']}\r');
+
+    sleep(new Duration(milliseconds: 200));
+    socket.write('power inline '+'${payload['powerInline_type']}\r');
+
+    sleep(new Duration(milliseconds: 200));
+    socket.close();
+
+  }
+
 }
 
 
