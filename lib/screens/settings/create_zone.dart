@@ -122,14 +122,20 @@ class _CreateZoneState extends State<CreateZone> {
                   ],
                 ),
               ),
+            SingleChildScrollView(
+              child: Container(
+                  width: screenSize.width/2,
+                  height: screenSize.height/2,
+                  child:
+                  GridView(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5,
+                    ),
+                        children:Provider.of<ZoneNamesModel>(context).zoneInfoList.map((item) => CardZone(zoneID:item.zoneID,zoneName: item.zoneName)).toList(),
+                  )
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                child: Wrap(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  children:Provider.of<ZoneNamesModel>(context).zoneInfoList.map((item) => CardZone(zoneID:item.zoneID,zoneName: item.zoneName)).toList(),
-                ),
               ),
+            ),
               ElevatedButton.icon(
                   icon: Icon(Icons.save),
                   label: Text('Save'),

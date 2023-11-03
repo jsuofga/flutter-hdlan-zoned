@@ -49,55 +49,51 @@ class _CardDisplayState extends State<CardDisplay> {
     return Card(
       child: Column(
         children: [
-          SizedBox(
-            width: screenSize.width/8,
-            height: screenSize.width/8,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Port ${widget.rxID+_txCount} ',style: TextStyle(color:Colors.black45,),),
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      constraints: BoxConstraints(),
-                      icon: const Icon(Icons.delete_forever),
-                      onPressed: () {
-                         Provider.of<DisplayInfoModel>(context,listen: false).deleteDisplay(widget.zoneID);
-                        setState(() {
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Port ${widget.rxID+_txCount} ',style: TextStyle(color:Colors.black45,),),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: BoxConstraints(),
+                    icon: const Icon(Icons.delete_forever),
+                    onPressed: () {
+                       Provider.of<DisplayInfoModel>(context,listen: false).deleteDisplay(widget.zoneID);
+                      setState(() {
 
-                        });
-                      },
-                    ),
-
-                  ],
-                ),
-                Text(widget.zoneName,style: TextStyle(color:Colors.black45,height: 2)),
-                TextFormField(
-                    controller: textController,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(left: 5.0, top: 10.0, bottom: 0.0),
-                        isDense: true,
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-
-                        ),
-                        hintText: 'Display Name',
-                        labelText: ''
-                    ),
-                    onChanged: (val){
-                      // print(textController.text);
-
+                      });
                     },
-                    validator: (val) {
+                  ),
 
-                    }
-                ),
+                ],
+              ),
+              Text(widget.zoneName,style: TextStyle(color:Colors.black45,height: 2)),
+              TextFormField(
+                  controller: textController,
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(left: 5.0, top: 10.0, bottom: 0.0),
+                      isDense: true,
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
 
-              ],
+                      ),
+                      hintText: 'Display Name',
+                      labelText: ''
+                  ),
+                  onChanged: (val){
+                    // print(textController.text);
+                    Provider.of<DisplayInfoModel>(context,listen: false).editDisplayName(widget.rxID, textController.text);
 
-            ),
+                  },
+                  validator: (val) {
+
+                  }
+              ),
+
+            ],
 
           ),
         ],

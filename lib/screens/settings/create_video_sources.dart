@@ -133,11 +133,19 @@ class _CreateVideoSourcesState extends State<CreateVideoSources> {
               ),
             ),
 
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Wrap(
-                // mainAxisAlignment: MainAxisAlignment.start,
-                children:Provider.of<SourceNamesModel>(context).sourceInfoList.map((item) => CardVideoSource(sourceID:item.sourceID,sourceName: item.sourceName)).toList(),
+            SingleChildScrollView(
+              child: Container(
+                  width: screenSize.width/2,
+                  height: screenSize.height/2,
+                  child:
+                  GridView(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5,
+                    ),
+                        children:Provider.of<SourceNamesModel>(context).sourceInfoList.map((item) => CardVideoSource(sourceID:item.sourceID,sourceName: item.sourceName)).toList(),
+
+                  )
+
               ),
             ),
             ElevatedButton.icon(

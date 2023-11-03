@@ -34,49 +34,44 @@ class _CardVideoSourceState extends State<CardVideoSource> {
     return Card(
       child: Column(
         children: [
-          SizedBox(
-            width: screenSize.width/8,
-            height: screenSize.width/8,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Video In ${widget.sourceID}',style: TextStyle(color:Colors.black45),),
-                    IconButton(
-                      icon: const Icon(Icons.delete_forever),
-                      onPressed: () {
-                        Provider.of<SourceNamesModel>(context,listen: false).deleteSource(widget.sourceID);
-                        setState(() {
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Video In ${widget.sourceID}',style: TextStyle(color:Colors.black45),),
+                  IconButton(
+                    icon: const Icon(Icons.delete_forever),
+                    onPressed: () {
+                      Provider.of<SourceNamesModel>(context,listen: false).deleteSource(widget.sourceID);
+                      setState(() {
 
-                        });
-                      },
-                    ),
-
-                  ],
-                ),
-                TextFormField(
-                  //initialValue: Provider.of<ZoneNamesModel>(context).zoneInfoList[widget.zoneID-1].zoneName,
-                    controller: textController,
-                    decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue)
-                        ),
-                        hintText: 'Video Source Name',
-                        labelText: ''
-                    ),
-                    onChanged: (val){
-                      // print(textController.text);
-                      Provider.of<SourceNamesModel>(context,listen: false).editSourceName(widget.sourceID, textController.text);
+                      });
                     },
-                    validator: (val) {
+                  ),
 
-                    }
-                ),
+                ],
+              ),
+              TextFormField(
+                //initialValue: Provider.of<ZoneNamesModel>(context).zoneInfoList[widget.zoneID-1].zoneName,
+                  controller: textController,
+                  decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue)
+                      ),
+                      hintText: 'Video Source Name',
+                      labelText: ''
+                  ),
+                  onChanged: (val){
+                    // print(textController.text);
+                    Provider.of<SourceNamesModel>(context,listen: false).editSourceName(widget.sourceID, textController.text);
+                  },
+                  validator: (val) {
 
-              ],
+                  }
+              ),
 
-            ),
+            ],
 
           ),
         ],

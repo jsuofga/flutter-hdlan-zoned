@@ -157,6 +157,10 @@ class DisplayInfoModel extends ChangeNotifier{
     });
     notifyListeners();
   }
+  editDisplayName(_display,_displayName){
+    displayInfoList[_display-1].displayName = _displayName;
+    notifyListeners();
+  }
 
 }
 

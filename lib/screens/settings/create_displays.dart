@@ -181,27 +181,32 @@ class _CreateDisplaysState extends State<CreateDisplays> {
               ),
             ),
           ),
-          Container(
-              height: screenSize.width/6,
-              child: Scrollbar(
-                isAlwaysShown: true,
-                radius: const Radius.circular(20.0),
-                thickness: 10,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children:Provider.of<DisplayInfoModel>(context).displayInfoList.map((item) => CardDisplay(zoneID:item.zoneID,rxID:item.rxID,zoneName:item.zoneName,displayName: item.displayName)).toList(),
-
+          SingleChildScrollView(
+            child: Container(
+              width: screenSize.width/2,
+              height: screenSize.height/2,
+              child:
+              GridView(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 5,
                 ),
+                children:Provider.of<DisplayInfoModel>(context).displayInfoList.map((item) => CardDisplay(zoneID:item.zoneID,rxID:item.rxID,zoneName:item.zoneName,displayName: item.displayName)).toList(),
+
               )
+
+               ),
           ),
-          ElevatedButton.icon(
-            icon: Icon(Icons.save),
-            label: Text('Save'),
-            onPressed: (){
-              Provider.of<DisplayInfoModel>(context,listen: false).saveDisplayInfo();
-              Navigator.popUntil(context, ModalRoute.withName('/'));
-              // Navigator.pop(context);
-            },
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: ElevatedButton.icon(
+              icon: Icon(Icons.save),
+              label: Text('Save'),
+              onPressed: (){
+                Provider.of<DisplayInfoModel>(context,listen: false).saveDisplayInfo();
+                Navigator.popUntil(context, ModalRoute.withName('/'));
+                // Navigator.pop(context);
+              },
+            ),
           ),
         ],
       ),

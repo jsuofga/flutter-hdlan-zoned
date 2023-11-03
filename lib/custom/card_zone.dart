@@ -34,49 +34,44 @@ class _CardZoneState extends State<CardZone> {
     return Card(
       child: Column(
         children: [
-          SizedBox(
-            width: screenSize.width/8,
-            height: screenSize.width/8,
-            child: Column(
-              children: [
-                 Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
-                     Text('Zone ${widget.zoneID}',style: TextStyle(color:Colors.black45),),
-                     IconButton(
-                       icon: const Icon(Icons.delete_forever),
-                       onPressed: () {
-                          Provider.of<ZoneNamesModel>(context,listen: false).deleteZone(widget.zoneID);
-                         setState(() {
+          Column(
+            children: [
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 children: [
+                   Text('Zone ${widget.zoneID}',style: TextStyle(color:Colors.black45),),
+                   IconButton(
+                     icon: const Icon(Icons.delete_forever),
+                     onPressed: () {
+                        Provider.of<ZoneNamesModel>(context,listen: false).deleteZone(widget.zoneID);
+                       setState(() {
 
-                         });
-                       },
-                     ),
+                       });
+                     },
+                   ),
 
-                   ],
-                 ),
-                TextFormField(
-                    //initialValue: Provider.of<ZoneNamesModel>(context).zoneInfoList[widget.zoneID-1].zoneName,
-                    controller: textController,
-                    decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)
-                    ),
-                        hintText: 'Zone Name',
-                        labelText: ''
-                    ),
-                    onChanged: (val){
-                      // print(textController.text);
-                      Provider.of<ZoneNamesModel>(context,listen: false).editZoneName(widget.zoneID, textController.text);
-                    },
-                    validator: (val) {
+                 ],
+               ),
+              TextFormField(
+                  //initialValue: Provider.of<ZoneNamesModel>(context).zoneInfoList[widget.zoneID-1].zoneName,
+                  controller: textController,
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue)
+                  ),
+                      hintText: 'Zone Name',
+                      labelText: ''
+                  ),
+                  onChanged: (val){
+                    // print(textController.text);
+                    Provider.of<ZoneNamesModel>(context,listen: false).editZoneName(widget.zoneID, textController.text);
+                  },
+                  validator: (val) {
 
-                    }
-                ),
+                  }
+              ),
 
-              ],
-
-            ),
+            ],
 
           ),
         ],
