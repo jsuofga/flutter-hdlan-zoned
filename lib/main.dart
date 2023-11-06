@@ -82,9 +82,10 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         backgroundColor: Color(0xFF2c3e50),
         actions: [
-          Text('V11.03.23'),
+          Text('V11.03.23-B'),
           TextButton.icon(
               onPressed: () {
+                 Provider.of<UserInterfaceModel>(context,listen: false).showAdmin();
                  showSettingsPanel();
               },
               label: Text(''),
@@ -99,6 +100,17 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Color(0xFF000000),
       resizeToAvoidBottomInset: true,
       body: Provider.of<UserInterfaceModel>(context).showHome ? Home() : Zones(),
+
+      bottomNavigationBar: Container(
+          height: 60,
+          color: Color(0xFF2c3e50),
+          child:Center(
+              child: IconButton(icon: Icon(Icons.workspaces_filled, size:36,color: Colors.white,),
+                onPressed: () {
+                  Provider.of<UserInterfaceModel>(context,listen: false).showHomeScreen();
+                },
+              ))
+      ),
       // floatingActionButton:Provider.of<UserInterfaceModel>(context).showHome ?SpeedDial(
       //   backgroundColor: Colors.blue ,
       //   icon: Icons.power,

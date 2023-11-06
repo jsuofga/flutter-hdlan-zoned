@@ -61,7 +61,7 @@ class _CardDisplayState extends State<CardDisplay> {
                     constraints: BoxConstraints(),
                     icon: const Icon(Icons.delete_forever),
                     onPressed: () {
-                       Provider.of<DisplayInfoModel>(context,listen: false).deleteDisplay(widget.zoneID);
+                       Provider.of<DisplayInfoModel>(context,listen: false).deleteDisplay(widget.rxID);
                       setState(() {
 
                       });

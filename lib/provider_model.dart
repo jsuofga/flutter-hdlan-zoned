@@ -148,17 +148,14 @@ class DisplayInfoModel extends ChangeNotifier{
     // print(displayInfoList);
     notifyListeners();
   }
-  deleteDisplay(_display) {
+  deleteDisplay(_display) async {
+
     //Delete zone
-    displayInfoList.removeAt(_display-1);
-    //Re assign display so displays are sequential
-    displayInfoList.asMap().forEach((index, value) {
-      displayInfoList[index].zoneID = index + 1;
-    });
+    displayInfoList.removeWhere((item) => item.rxID ==_display);
     notifyListeners();
   }
   editDisplayName(_display,_displayName){
-    displayInfoList[_display-1].displayName = _displayName;
+    displayInfoList[displayInfoList.indexWhere((item) => item.rxID ==_display)].displayName = _displayName;
     notifyListeners();
   }
 
