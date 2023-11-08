@@ -74,7 +74,7 @@ class _CardDisplayState extends State<CardDisplay> {
               TextFormField(
                   controller: textController,
                   decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(left: 5.0, top: 10.0, bottom: 0.0),
+                      contentPadding: EdgeInsets.only(left: 5.0, top: 0.0, bottom: 0.0),
                       isDense: true,
                       enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),

@@ -41,6 +41,8 @@ class _CardVideoSourceState extends State<CardVideoSource> {
                 children: [
                   Text('Video In ${widget.sourceID}',style: TextStyle(color:Colors.black45),),
                   IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: BoxConstraints(),
                     icon: const Icon(Icons.delete_forever),
                     onPressed: () {
                       Provider.of<SourceNamesModel>(context,listen: false).deleteSource(widget.sourceID);

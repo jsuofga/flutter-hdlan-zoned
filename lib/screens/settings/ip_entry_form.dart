@@ -85,29 +85,32 @@ class _IpEntryFormState extends State<IpEntryForm> {
                 ),
               ),
 
-              SizedBox(
-                width: 200,
-                child: ElevatedButton.icon(
-                    icon: Icon(Icons.check),
-                    label: Text('Submit'),
-                    style: ElevatedButton.styleFrom(
-                      textStyle: TextStyle( fontSize: 20),
-                      primary:Colors.green,
-                    ),
-                    onPressed: () async {
-                      // Validate returns true if the form is valid, or false otherwise.
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SizedBox(
+                  width: 200,
+                  child: ElevatedButton.icon(
+                      icon: Icon(Icons.check),
+                      label: Text('Submit'),
+                      style: ElevatedButton.styleFrom(
+                        textStyle: TextStyle( fontSize: 20),
+                        primary:Colors.green,
+                      ),
+                      onPressed: () async {
+                        // Validate returns true if the form is valid, or false otherwise.
 
-                      if (_formKey.currentState!.validate()) {
-                        Provider.of<UserInterfaceModel>(context,listen: false).hideIP();
-                        Provider.of<SnmpModel>(context,listen: false).ipAddress = _ip_mdf;
-                        // Save IP address to storage
-                         _saveIP();
-                         _model = await Provider.of<SnmpModel>(context,listen: false).getModel(_ip_mdf);
-                         // Save model address to storage
-                         _saveModel();
-                       // Navigator.pop(context); // Closes the Bottom Modal
+                        if (_formKey.currentState!.validate()) {
+                          Provider.of<UserInterfaceModel>(context,listen: false).hideIP();
+                          Provider.of<SnmpModel>(context,listen: false).ipAddress = _ip_mdf;
+                          // Save IP address to storage
+                           _saveIP();
+                           _model = await Provider.of<SnmpModel>(context,listen: false).getModel(_ip_mdf);
+                           // Save model address to storage
+                           _saveModel();
+                         // Navigator.pop(context); // Closes the Bottom Modal
+                        }
                       }
-                    }
+                  ),
                 ),
               ),
 

@@ -41,6 +41,8 @@ class _CardZoneState extends State<CardZone> {
                  children: [
                    Text('Zone ${widget.zoneID}',style: TextStyle(color:Colors.black45),),
                    IconButton(
+                     padding: EdgeInsets.zero,
+                     constraints: BoxConstraints(),
                      icon: const Icon(Icons.delete_forever),
                      onPressed: () {
                         Provider.of<ZoneNamesModel>(context,listen: false).deleteZone(widget.zoneID);
