@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         backgroundColor: Color(0xFF2c3e50),
         actions: [
-          Text('V11.07.23'),
+          Text('V6.17.24'),
           TextButton.icon(
               onPressed: () {
                  Provider.of<UserInterfaceModel>(context,listen: false).showAdmin();

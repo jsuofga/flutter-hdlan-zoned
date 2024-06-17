@@ -235,8 +235,9 @@ class SnmpModel extends ChangeNotifier {
       portColors = [];
       portStatus = [];
 
-      RegExp re = RegExp(r'^CBS[2,3]50');
-      int ports = 1;
+      RegExp re = RegExp(r'^(CBS[2,3]50|C1200)');
+
+       int ports = 1;
       if (re.hasMatch(model)){
         if(model.contains('48')){
           ports = 52;
@@ -245,6 +246,8 @@ class SnmpModel extends ChangeNotifier {
          // ports = 24; //Temp for CBS250-24T
         }else if (model.contains('16')){
           ports = 18;
+        }else if (model.contains('8')){
+          ports = 10;
         }else{}
       }
       // SNMP - get port vlan membership

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hdlan_controller/custom/network_switches/cbs250_350_24.dart';
 import 'package:hdlan_controller/custom/network_switches/cbs250_350_48.dart';
 import 'package:hdlan_controller/custom/network_switches/cbs250_350_16.dart';
+import 'package:hdlan_controller/custom/network_switches/cbs250_350_8.dart';
 import 'package:hdlan_controller/provider_model.dart';
 import 'package:hdlan_controller/screens/settings/ip_entry_form.dart';
 import 'package:provider/provider.dart';
@@ -30,9 +31,11 @@ class _SynchSwitchState extends State<SynchSwitch> {
 
     //Methods
     showNetworkSwitch(){
-      RegExp re48port = RegExp(r'^CBS[2,3]50-48');
-      RegExp re24port = RegExp(r'^CBS[2,3]50-24');
-      RegExp re16port = RegExp(r'^CBS[2,3]50-16');
+
+      RegExp re48port = RegExp(r'^(CBS[2,3]50-48|C1200-48)');
+      RegExp re24port = RegExp(r'^(CBS[2,3]50-24|C1200-24)');
+      RegExp re16port = RegExp(r'^(CBS[2,3]50-16|C1200-16)');
+      RegExp re8port = RegExp(r'^(CBS[2,3]50-8|C1200-8)');
 
       //Better to use Regular Expressions to cover more models easier
       if(re48port.hasMatch(Provider.of<SnmpModel>(context).model)){
@@ -41,6 +44,8 @@ class _SynchSwitchState extends State<SynchSwitch> {
         return CBS_250_350_24port();
       }else if(re16port.hasMatch(Provider.of<SnmpModel>(context).model)) {
         return CBS_250_350_16port();
+      }else if(re8port.hasMatch(Provider.of<SnmpModel>(context).model)) {
+        return CBS_250_350_8port();
       }else return Text('Switch Not Detected');
     }
 
