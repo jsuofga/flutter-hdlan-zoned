@@ -235,7 +235,7 @@ class SnmpModel extends ChangeNotifier {
       portColors = [];
       portStatus = [];
 
-      RegExp re = RegExp(r'^(CBS[2,3]50|C1200)');
+      RegExp re = RegExp(r'^(CBS[2,3]50|C1200|C1300)');
 
        int ports = 1;
       if (re.hasMatch(model)){
