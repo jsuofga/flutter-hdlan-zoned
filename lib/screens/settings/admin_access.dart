@@ -42,7 +42,7 @@ class _AdminAccessState extends State<AdminAccess> {
                     },
                     validator: (val) {
                       //Regular Expression check of IP address
-                      if(val != 'octava'){
+                      if(val != 'octava+troipac'){
                         return 'Enter valid Admin Password';
                       }else{
                         setState(() {

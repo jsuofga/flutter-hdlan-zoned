@@ -32,10 +32,10 @@ class _SynchSwitchState extends State<SynchSwitch> {
     //Methods
     showNetworkSwitch(){
 
-      RegExp re48port = RegExp(r'^(CBS[2,3]50-48|C1200-48)');
-      RegExp re24port = RegExp(r'^(CBS[2,3]50-24|C1200-24)');
-      RegExp re16port = RegExp(r'^(CBS[2,3]50-16|C1200-16)');
-      RegExp re8port = RegExp(r'^(CBS[2,3]50-8|C1200-8)');
+      RegExp re48port = RegExp(r'^(CBS[2,3]50-48|C1200-48|C1300-48)');
+      RegExp re24port = RegExp(r'^(CBS[2,3]50-24|C1200-24|C1300-24)');
+      RegExp re16port = RegExp(r'^(CBS[2,3]50-16|C1200-16|C1300-16)');
+      RegExp re8port = RegExp(r'^(CBS[2,3]50-8|C1200-8|C1300-8)');
 
       //Better to use Regular Expressions to cover more models easier
       if(re48port.hasMatch(Provider.of<SnmpModel>(context).model)){
