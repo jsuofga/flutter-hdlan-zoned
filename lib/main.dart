@@ -19,6 +19,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+
+
     return MultiProvider(
       providers: [
         // ChangeNotifierProvider( create: (context) => SwitchingModel()),
@@ -74,6 +77,75 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
+    // Banner - Show PoE banner, if poeWattage = 0
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      if (Provider.of<SnmpModel>(context,listen: false).poeWattage == '0') {
+        ScaffoldMessenger.of(context).showMaterialBanner(
+          MaterialBanner(
+            content: Text(
+              '⚠️ Attention: PoE power consumption is 0 Watts',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            ),
+            backgroundColor: Colors.white,
+            actions: [
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.green, // white background
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                ),
+                onPressed: () async {
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        // Show a Snackbar
+                          SnackBar(
+                            content: Text('Wait... Powering on PoE',
+                              textAlign: TextAlign.center, // Center the text
+                              style: TextStyle(
+                                color: Colors.white, // Text color
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            backgroundColor: Colors.green, // Green background
+                            duration: Duration(seconds: 10),
+                            behavior: SnackBarBehavior.floating, // Optional: makes it float above bottom
+                            margin: EdgeInsets.symmetric(horizontal: 50, vertical: 10), // Optional: padding
+                          ),
+                        );
+
+                      // Close the Banner after 1 second
+                      Future.delayed(Duration(seconds: 1), () {
+                        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+                      });
+
+                      // Turn PoE On
+                          String ip = await Provider.of<SwitchingModel>(context, listen: false).getIPAddressMDFSwitch();
+                          String tx_rx_total = (Provider.of<SnmpModel>(context, listen: false).txCount +
+                              Provider.of<SnmpModel>(context, listen: false).rxCount).toString();
+                          CiscoSmbSwitch(ipAddress: ip).poe_power({
+                            'range': '1-${tx_rx_total}',
+                            'powerInline_type': 'auto',
+                          });
+              },
+                child: Text(
+                  'Turn PoE ON',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        );
+      } else {
+        // Hide it automatically once PoE power is restored
+        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+      }
+    });
+
+    ///////////////////////////////////////////////////////////////////
+
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -82,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         backgroundColor: Color(0xFF2c3e50),
         actions: [
-          Text('V6.11.25'),
+          Text('V11.06.25'),
           TextButton.icon(
               onPressed: () {
                  Provider.of<UserInterfaceModel>(context,listen: false).showAdmin();
@@ -102,57 +174,126 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Provider.of<UserInterfaceModel>(context).showHome ? Home() : Zones(),
 
       bottomNavigationBar: Container(
-          height: 60,
-          color: Color(0xFF2c3e50),
-          child:Center(
-              child: IconButton(icon: Icon(Icons.workspaces_filled, size:36,color: Colors.white,),
+        height: 60,
+        color: Color(0xFF2c3e50),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // LEFT SIDE BUTTONS
+            Positioned(
+              left: 8,
+              child: Row(
+                children: [
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Colors.red, width: 2), // green outline                      foregroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6), // rounded corners
+                      ),
+                    ),
+                    onPressed: () async {
+                      String ip = await Provider.of<SwitchingModel>(context, listen: false).getIPAddressMDFSwitch();
+                      String tx_rx_total = (Provider.of<SnmpModel>(context, listen: false).txCount +
+                          Provider.of<SnmpModel>(context, listen: false).rxCount)
+                          .toString();
+                      CiscoSmbSwitch(ipAddress: ip).poe_power({
+                        'range': '1-${tx_rx_total}',
+                        'powerInline_type': 'never',
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        // Show a Snackbar
+                        SnackBar(
+                          content: Text('Powering OFF PoE',
+                            textAlign: TextAlign.center, // Center the text
+                            style: TextStyle(
+                              color: Colors.white, // Text color
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          backgroundColor: Colors.red, // Blue background
+                          duration: Duration(seconds: 10),
+                          behavior: SnackBarBehavior.floating, // Optional: makes it float above bottom
+                          margin: EdgeInsets.symmetric(horizontal: 50, vertical: 10), // Optional: padding
+                        ),
+                      );
+                    },
+                    child: Text('PoE Off',
+                      style: TextStyle(
+                        color: Colors.red, // red text
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: Colors.green, width: 2), // green outline
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6), // rounded corners
+                        ),
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    ),
+                    onPressed: () async {
+                      String ip = await Provider.of<SwitchingModel>(context, listen: false).getIPAddressMDFSwitch();
+                      String tx_rx_total = (Provider.of<SnmpModel>(context, listen: false).txCount +
+                          Provider.of<SnmpModel>(context, listen: false).rxCount)
+                          .toString();
+                      CiscoSmbSwitch(ipAddress: ip).poe_power({
+                        'range': '1-${tx_rx_total}',
+                        'powerInline_type': 'auto',
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        // Show a Snackbar
+                        SnackBar(
+                          content: Text('Wait... Powering ON PoE',
+                            textAlign: TextAlign.center, // Center the text
+                            style: TextStyle(
+                              color: Colors.white, // Text color
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          backgroundColor: Colors.green, // Blue background
+                          duration: Duration(seconds: 10),
+                          behavior: SnackBarBehavior.floating, // Optional: makes it float above bottom
+                          margin: EdgeInsets.symmetric(horizontal: 50, vertical: 10), // Optional: padding
+                        ),
+                      );
+                    },
+                    child: Text('PoE On',
+                      style: TextStyle(
+                      color: Colors.green, //
+                      fontWeight: FontWeight.bold,
+                    ),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      'Power '+ Provider.of<SnmpModel>(context).poeWattage +' W' ,
+                      style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
+            ),
+
+            // CENTER HOME BUTTON
+            Center(
+              child: IconButton(
+                icon: Icon(Icons.workspaces_filled, size: 36, color: Colors.white),
                 onPressed: () {
-                  Provider.of<UserInterfaceModel>(context,listen: false).showHomeScreen();
+                  Provider.of<UserInterfaceModel>(context, listen: false).showHomeScreen();
                 },
-              ))
+              ),
+            ),
+
+
+          ],
+        ),
       ),
-      // floatingActionButton:Provider.of<UserInterfaceModel>(context).showHome ?SpeedDial(
-      //   backgroundColor: Colors.blue ,
-      //   icon: Icons.power,
-      //   children: [
-      //     SpeedDialChild(
-      //         child: Icon(Icons.power,color: Colors.white,),
-      //       backgroundColor: Colors.green,
-      //       labelBackgroundColor: Colors.green,
-      //       labelStyle: TextStyle(color: Colors.white),
-      //       label: 'PoE On',
-      //       onTap: () async{
-      //         String ip =  await Provider.of<SwitchingModel>(context,listen: false).getIPAddressMDFSwitch();
-      //         String tx_rx_total = await (Provider.of<SnmpModel>(context,listen: false).txCount + Provider.of<SnmpModel>(context,listen: false).rxCount).toString();
-      //         CiscoSmbSwitch(ipAddress: ip).poe_power({'range':'1-${tx_rx_total}', 'powerInline_type':'auto' });
-      //
-      //       }
-      //
-      //     ),
-      //     SpeedDialChild(
-      //         child: Icon(Icons.power),
-      //         backgroundColor: Colors.red,
-      //         labelBackgroundColor: Colors.red,
-      //         labelStyle: TextStyle(color: Colors.white),
-      //         label: 'PoE Off',
-      //         onTap: () async {
-      //           String ip =  await Provider.of<SwitchingModel>(context,listen: false).getIPAddressMDFSwitch();
-      //           String tx_rx_total = await (Provider.of<SnmpModel>(context,listen: false).txCount + Provider.of<SnmpModel>(context,listen: false).rxCount).toString();
-      //           CiscoSmbSwitch(ipAddress: ip).poe_power({'range':'1-${tx_rx_total}', 'powerInline_type':'never' });
-      //
-      //         },
-      //
-      //     )
-      //   ],
-      //
-      // ): FloatingActionButton(
-      //   backgroundColor: Colors.orange,
-      //   onPressed: (){
-      //     Provider.of<UserInterfaceModel>(context,listen: false).showHomeScreen();
-      //   },
-      //   tooltip: 'Increment',
-      //   child: const Icon(Icons.home),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
+
+
     );
   }
 }

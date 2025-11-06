@@ -172,6 +172,7 @@ class SnmpModel extends ChangeNotifier {
   int rxCount = 0;
   int txCount = 0;
   int networkCount = 0;
+  String poeWattage = '1';
 
   startSpinner(){
     showSpinner = true;
@@ -217,7 +218,38 @@ class SnmpModel extends ChangeNotifier {
   startPoll(){
         Timer.periodic(Duration(seconds:5), (timer) async {
             await pollVlanMembership();
+            await pollPoE_power_consumed();
         });
+
+  }
+  pollPoE_power_consumed() async{
+
+    try {
+      // Read from storage
+      final prefs = await SharedPreferences.getInstance();
+      ipAddress = await prefs.getString('ip_mdf') ?? '';
+      model = await prefs.getString('model') ?? '';
+
+      var target = InternetAddress(ipAddress);
+      var session = await Snmp.createSession(target);
+
+      // SNMP - get POE wattage
+      var oid = Oid.fromString('1.3.6.1.2.1.105.1.3.1.1.4.1'); // PoE power consumed
+      var payload = await session.get(oid);
+      var data = payload.pdu.varbinds[0].toString();
+      String result = data.substring(data.indexOf(':')+2);  //Removes everything after first ':'
+
+      poeWattage = result;
+      print(poeWattage);
+      notifyListeners();
+      return;
+    }
+    catch(e){
+      model = 'No Compatible Network Switch Found';
+      // print('inside Catch');
+      notifyListeners();
+      return ;
+    }
 
   }
   pollVlanMembership() async{

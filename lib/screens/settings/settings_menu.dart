@@ -75,7 +75,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
         mainAxisAlignment: MainAxisAlignment.center ,
         children: [
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(10.0),
             child: Container(
                 child: SizedBox(
                   width: 350,
@@ -99,7 +99,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
           Visibility(
             visible: _model != 'not detected',
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(10.0),
               child: Container(
                   child: SizedBox(
                     width:350,
@@ -125,7 +125,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
           Visibility(
             visible:  Provider.of<ZoneNamesModel>(context).zoneInfoList.length > 0,
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(10.0),
               child: Container(
                   child: SizedBox(
                     width:350,
@@ -151,7 +151,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
           Visibility(
             visible: _model != 'not detected',
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(10.0),
               child: Container(
                   child: SizedBox(
                     width:350,
@@ -174,8 +174,10 @@ class _SettingsMenuState extends State<SettingsMenu> {
                   )),
             ),
           ),
+
+
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(10.0),
             child: Container(
                 child: SizedBox(
                   width:350,
