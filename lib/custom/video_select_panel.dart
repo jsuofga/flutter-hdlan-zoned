@@ -36,8 +36,14 @@ class _VideoSelectPanelState extends State<VideoSelectPanel> {
                     textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {
-                    Provider.of<UserInterfaceModel>(context, listen: false).showHomeScreen();
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                    final uiModel = Provider.of<UserInterfaceModel>(context, listen: false);
+                    if (uiModel.showHome || uiModel.zoneToShow == 0) {
+                      uiModel.showHomeScreen();
+                      Navigator.popUntil(context, ModalRoute.withName('/'));
+                    } else {
+                      uiModel.setZoneToShow(uiModel.zoneToShow);
+                      Navigator.pop(context);
+                    }
                   },
                 ),
               ),
