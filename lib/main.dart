@@ -154,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         backgroundColor: Color(0xFF2c3e50),
         actions: [
-          Text('V11.06.25'),
+          Text('V9.03.26'),
           TextButton.icon(
               onPressed: () {
                  Provider.of<UserInterfaceModel>(context,listen: false).showAdmin();
@@ -163,7 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
               label: Text(''),
               icon: Icon(Icons.settings),
               style: TextButton.styleFrom(
-                primary: Colors.white,
+                foregroundColor: Colors.white,
               )
           )
         ],

@@ -101,7 +101,7 @@ class _SynchSwitchState extends State<SynchSwitch> {
                         label: Text('Exit'),
                         icon: Icon(Icons.exit_to_app),
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.red,
+                          backgroundColor: Colors.red,
                           textStyle: TextStyle(
                             color: Colors.black,
                             fontSize: 20,
@@ -127,7 +127,7 @@ class _SynchSwitchState extends State<SynchSwitch> {
                           label: Text('Cancel'),
                           icon: Icon(Icons.error),
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.red,
+                            backgroundColor: Colors.red,
                             textStyle: TextStyle(
                               color: Colors.black,
                               fontSize: 20,
@@ -152,7 +152,7 @@ class _SynchSwitchState extends State<SynchSwitch> {
                           label: Text('Save'),
                           icon: Icon(Icons.exit_to_app),
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
+                            backgroundColor: Colors.blue,
                             textStyle: TextStyle(
                               color: Colors.black,
                               fontSize: 20,

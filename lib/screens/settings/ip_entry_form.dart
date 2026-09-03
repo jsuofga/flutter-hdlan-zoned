@@ -94,7 +94,7 @@ class _IpEntryFormState extends State<IpEntryForm> {
                       label: Text('Submit'),
                       style: ElevatedButton.styleFrom(
                         textStyle: TextStyle( fontSize: 20),
-                        primary:Colors.green,
+                        backgroundColor:Colors.green,
                       ),
                       onPressed: () async {
                         // Validate returns true if the form is valid, or false otherwise.

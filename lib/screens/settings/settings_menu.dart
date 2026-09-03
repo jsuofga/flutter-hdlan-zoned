@@ -190,7 +190,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                     label: Text('CANCEL'),
                     icon: Icon(Icons.cancel),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
+                      backgroundColor: Colors.red,
                       textStyle: TextStyle(
                         color: Colors.black,
                         fontSize: 22,

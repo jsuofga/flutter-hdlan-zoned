@@ -46,7 +46,7 @@ class _Zones  extends State<Zones> {
                 padding: const EdgeInsets.all(20.0),
                  // child: Text('${Provider.of<ZoneNamesModel>(context).zoneInfoList[_zoneIndex].zoneName}', style:TextStyle(color:Colors.white,fontSize: 50),),
                  child: ElevatedButton(
-                   style: ElevatedButton.styleFrom(primary: Color(0xFF2c3e50)),
+                   style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF2c3e50)),
                    child:Text('${Provider.of<ZoneNamesModel>(context).zoneInfoList[_zoneIndex].zoneName}', style:TextStyle(color:Colors.white,fontSize: 40)),
                    onPressed: (){
                      showVideoSelectPanel();

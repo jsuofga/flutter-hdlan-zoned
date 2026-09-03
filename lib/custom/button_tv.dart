@@ -64,7 +64,7 @@ class _ButtonTVState extends State<ButtonTV> {
                            Provider.of<SwitchingModel>(context,listen: false).selectZone(0) ;
                            showVideoSelectPanel();
                          },
-                         style: ElevatedButton.styleFrom(primary: Colors.white),
+                         style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
                          child: Text('${widget.displayName}',style:TextStyle(color:Colors.black)),
                         ),
                  ),

@@ -63,7 +63,7 @@ class _AdminAccessState extends State<AdminAccess> {
                       icon: Icon(Icons.close),
                       label: Text('Cancel'),
                       style: ElevatedButton.styleFrom(
-                        primary:Colors.red,
+                        backgroundColor:Colors.red,
                       ),
                       onPressed: () {
                         Navigator.pop(context);
@@ -73,7 +73,7 @@ class _AdminAccessState extends State<AdminAccess> {
                       icon: Icon(Icons.check),
                       label: Text('Submit'),
                       style: ElevatedButton.styleFrom(
-                        primary:Colors.green,
+                        backgroundColor:Colors.green,
                       ),
                       onPressed: () {
                         // Validate returns true if the form is valid, or false otherwise.
