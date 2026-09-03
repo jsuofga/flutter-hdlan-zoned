@@ -57,16 +57,27 @@ class _SettingsMenuState extends State<SettingsMenu> {
   }
 
   // Bottom Sheet Modal - Admin and Settings
- void showPage(_page) {
-   showModalBottomSheet(isScrollControlled: true,context: context, builder: (context){
-     return Container(
-       padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-       child:_page,
-       // child: Provider.of<UserInterfaceModel>(context).showAdminAccess ? AdminAccess():SettingsMenu()
-     );
-   });
-   // }).whenComplete(() => Provider.of<UserInterfaceModel>(context,listen: false).hideIP() );
- }
+  void showPage(_page) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      barrierColor: Colors.transparent,
+      constraints: const BoxConstraints(
+        maxWidth: double.infinity,
+        minWidth: double.infinity,
+      ),
+      context: context,
+      builder: (context) {
+        final height80vh = MediaQuery.of(context).size.height * 0.8;
+
+        return Container(
+          height: height80vh,
+          width: double.infinity,
+          color: Colors.white,
+          child: _page,
+        );
+      },
+    );
+  }
 
   @override
     Widget build(BuildContext context) {

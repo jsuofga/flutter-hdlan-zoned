@@ -63,13 +63,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // Bottom Sheet Modal - Admin and Settings
   void showSettingsPanel() {
-    showModalBottomSheet(isScrollControlled: true,context: context, builder: (context){
-      return Container(
-          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 50),
-          child: Provider.of<UserInterfaceModel>(context).showAdminAccess ? AdminAccess():SettingsMenu()
-      );
-    });
-    // }).whenComplete(() => Provider.of<UserInterfaceModel>(context,listen: false).hideIP() );
+    showModalBottomSheet(
+      isScrollControlled: true,
+      barrierColor: Colors.transparent,
+      constraints: const BoxConstraints(
+        maxWidth: double.infinity,
+        minWidth: double.infinity,
+      ),
+      context: context,
+      builder: (context) {
+        final height80vh = MediaQuery.of(context).size.height * 0.8;
+
+        return Container(
+          height: height80vh,
+          width: double.infinity,
+          color: Colors.white,
+          child: Provider.of<UserInterfaceModel>(context).showAdminAccess ? const AdminAccess() : const SettingsMenu(),
+        );
+      },
+    );
   }
 
 //Defined variables

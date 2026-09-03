@@ -21,101 +21,98 @@ class _IpEntryFormState extends State<IpEntryForm> {
     super.initState();
     _readIPAddress();
   }
-  //Read from storage
+
   void _readIPAddress() async {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
       _ip_mdf = prefs.getString('ip_mdf') ?? '';
       textController_mdf.text = _ip_mdf;
-
     });
   }
-  //Save to storage
-   _saveIP() async {
-     final prefs = await SharedPreferences.getInstance();
-     await prefs.setString('ip_mdf', _ip_mdf);
 
+  _saveIP() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('ip_mdf', _ip_mdf);
   }
-   _saveModel() async {
+
+  _saveModel() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('model', _model);
   }
 
   @override
   Widget build(BuildContext context) {
-
-    final Size screenSize = MediaQuery.of(context).size;
-
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
       child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-
-              Text('IP Address of Cisco Network Switch'),
-              SizedBox(
-                width: screenSize.width/3,
-                child: TextFormField(
-                  //initialValue:_ip_mdf ,
-                    controller: textController_mdf,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                        ),
-                        hintText: 'Enter IP Address of MDF Switch',
-                        labelText: _ip_mdf
-                    ),
-                    onChanged: (val){
-                      setState(() {
-
-                      });
-                    },
-                    validator: (val) {
-                      //Regular Expression check of IP address
-                      if(!RegExp(r"^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$").hasMatch(val!) ){
-                        return 'Enter IP address of MDF Switch';
-                      }else{
-                        setState(() {
-                          _ip_mdf = val;
-                        });
-                        return null;
-                      }
-                    }
-                ),
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              'IP Address of Cisco Network Switch',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
-
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: SizedBox(
-                  width: 200,
-                  child: ElevatedButton.icon(
-                      icon: Icon(Icons.check),
-                      label: Text('Submit'),
-                      style: ElevatedButton.styleFrom(
-                        textStyle: TextStyle( fontSize: 20),
-                        backgroundColor:Colors.green,
-                      ),
-                      onPressed: () async {
-                        // Validate returns true if the form is valid, or false otherwise.
-
-                        if (_formKey.currentState!.validate()) {
-                          Provider.of<UserInterfaceModel>(context,listen: false).hideIP();
-                          Provider.of<SnmpModel>(context,listen: false).ipAddress = _ip_mdf;
-                          // Save IP address to storage
-                           _saveIP();
-                           _model = await Provider.of<SnmpModel>(context,listen: false).getModel(_ip_mdf);
-                           // Save model address to storage
-                           _saveModel();
-                         // Navigator.pop(context); // Closes the Bottom Modal
-                        }
-                      }
-                  ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: TextFormField(
+                controller: textController_mdf,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: 'Enter IP Address of MDF Switch',
+                  labelText: _ip_mdf.isNotEmpty ? _ip_mdf : 'IP Address',
                 ),
+                onChanged: (val) {
+                  setState(() {});
+                },
+                validator: (val) {
+                  if (!RegExp(r"^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$")
+                      .hasMatch(val!)) {
+                    return 'Enter valid IP address of MDF Switch';
+                  } else {
+                    setState(() {
+                      _ip_mdf = val;
+                    });
+                    return null;
+                  }
+                },
               ),
-
-            ],
-          )
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.check),
+                label: const Text('Submit'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  textStyle: const TextStyle(fontSize: 20),
+                  backgroundColor: Colors.green,
+                ),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    Provider.of<UserInterfaceModel>(context, listen: false)
+                        .hideIP();
+                    Provider.of<SnmpModel>(context, listen: false).ipAddress =
+                        _ip_mdf;
+                    _saveIP();
+                    _model = await Provider.of<SnmpModel>(context, listen: false)
+                        .getModel(_ip_mdf);
+                    _saveModel();
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
