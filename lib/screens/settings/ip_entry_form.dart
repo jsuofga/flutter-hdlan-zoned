@@ -43,13 +43,18 @@ class _IpEntryFormState extends State<IpEntryForm> {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
       child: Form(
         key: _formKey,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
               'IP Address of Cisco Network Switch',
@@ -60,9 +65,9 @@ class _IpEntryFormState extends State<IpEntryForm> {
                 color: Colors.black,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             SizedBox(
-              width: double.infinity,
+              width: screenSize.width * 0.5,
               child: TextFormField(
                 controller: textController_mdf,
                 decoration: InputDecoration(
@@ -86,29 +91,52 @@ class _IpEntryFormState extends State<IpEntryForm> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.check),
-                label: const Text('Submit'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  textStyle: const TextStyle(fontSize: 20),
-                  backgroundColor: Colors.green,
-                ),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    Provider.of<UserInterfaceModel>(context, listen: false)
-                        .hideIP();
-                    Provider.of<SnmpModel>(context, listen: false).ipAddress =
-                        _ip_mdf;
-                    _saveIP();
-                    _model = await Provider.of<SnmpModel>(context, listen: false)
-                        .getModel(_ip_mdf);
-                    _saveModel();
-                  }
-                },
+              width: screenSize.width * 0.5,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.close),
+                      label: const Text('Cancel'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.check),
+                      label: const Text('Submit'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          Provider.of<UserInterfaceModel>(context, listen: false)
+                              .hideIP();
+                          Provider.of<SnmpModel>(context, listen: false).ipAddress =
+                              _ip_mdf;
+                          _saveIP();
+                          _model = await Provider.of<SnmpModel>(context, listen: false)
+                              .getModel(_ip_mdf);
+                          _saveModel();
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

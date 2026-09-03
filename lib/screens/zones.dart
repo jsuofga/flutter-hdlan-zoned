@@ -14,15 +14,23 @@ class Zones extends StatefulWidget {
 class _Zones  extends State<Zones> {
   // Bottom Sheet Modal - Admin and Settings
   void showVideoSelectPanel() {
-    showModalBottomSheet(isScrollControlled: false,context: context, builder: (context){
-      return Container(
-
-        padding: EdgeInsets.symmetric(vertical: 20,horizontal: 50),
-        child:VideoSelectPanel(),
-        // child: Provider.of<UserInterfaceModel>(context).showAdminAccess ? AdminAccess():SettingsMenu()
-      );
-    });
-    // }).whenComplete(() => Provider.of<UserInterfaceModel>(context,listen: false).hideIP() );
+    showModalBottomSheet(
+      isScrollControlled: true,
+      constraints: const BoxConstraints(
+        maxWidth: double.infinity,
+        minWidth: double.infinity,
+      ),
+      context: context,
+      builder: (context) {
+        final height80vh = MediaQuery.of(context).size.height * 0.8;
+        return Container(
+          height: height80vh,
+          width: double.infinity,
+          color: Colors.white,
+          child: const VideoSelectPanel(),
+        );
+      },
+    );
   }
 
   void initState() {

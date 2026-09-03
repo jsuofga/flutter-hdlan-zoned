@@ -21,15 +21,23 @@ class _ButtonTVState extends State<ButtonTV> {
 
   // Bottom Sheet Modal - Admin and Settings
   void showVideoSelectPanel() {
-    showModalBottomSheet(isScrollControlled: false,context: context, builder: (context){
-      return Container(
-
-        padding: EdgeInsets.symmetric(vertical: 20,horizontal: 50),
-        child:VideoSelectPanel(),
-        // child: Provider.of<UserInterfaceModel>(context).showAdminAccess ? AdminAccess():SettingsMenu()
-      );
-    });
-    // }).whenComplete(() => Provider.of<UserInterfaceModel>(context,listen: false).hideIP() );
+    showModalBottomSheet(
+      isScrollControlled: true,
+      constraints: const BoxConstraints(
+        maxWidth: double.infinity,
+        minWidth: double.infinity,
+      ),
+      context: context,
+      builder: (context) {
+        final height80vh = MediaQuery.of(context).size.height * 0.8;
+        return Container(
+          height: height80vh,
+          width: double.infinity,
+          color: Colors.white,
+          child: const VideoSelectPanel(),
+        );
+      },
+    );
   }
 
   //Read from storage
@@ -64,11 +72,20 @@ class _ButtonTVState extends State<ButtonTV> {
                            Provider.of<SwitchingModel>(context,listen: false).selectZone(0) ;
                            showVideoSelectPanel();
                          },
-                         style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+                         style: ElevatedButton.styleFrom(
+                           backgroundColor: Colors.white,
+                           shape: RoundedRectangleBorder(
+                             borderRadius: BorderRadius.circular(6.0),
+                           ),
+                         ),
                          child: Text('${widget.displayName}',style:TextStyle(color:Colors.black)),
                         ),
                  ),
-                Positioned(child: Text('P${widget.rxID + _txCount }',style:TextStyle(fontSize:10,color:Colors.black)),top:8 ,right:5)
+                Positioned(
+                  top: 4,
+                  left: 4,
+                  child: Text('P${widget.rxID + _txCount}', style: const TextStyle(fontSize: 10, color: Colors.grey, fontWeight: FontWeight.bold)),
+                )
             ],
           )
         ),

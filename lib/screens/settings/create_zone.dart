@@ -16,143 +16,183 @@ class _CreateZoneState extends State<CreateZone> {
   final _formKey = GlobalKey<FormState>();
   String _zoneName = '';
 
-
   void showAlert() {
-    showDialog(context: context, builder: (BuildContext context) {
-      return AlertDialog(
-        title: Row(
-          children: [
-            Icon(Icons.warning,color: Colors.amber,size: 50,),
-            Text("Important"),
-          ],
-        ),
-        content: Text("Max Number of Zones is 8"),
-        actions: [
-          ElevatedButton(
-              onPressed: (){
-                Navigator.pop(context);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Row(
+            children: [
+              Icon(Icons.warning, color: Colors.amber, size: 50),
+              Text("Important"),
+            ],
+          ),
+          content: const Text("Max Number of Zones is 8"),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
                 },
-              child: Text("Ok- Got it")),
-        ],
-      );
-
-    });
+                child: const Text("Ok- Got it")),
+          ],
+        );
+      },
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    Provider.of<ZoneNamesModel>(context,listen: false).getZoneInfo();
+    Provider.of<ZoneNamesModel>(context, listen: false).getZoneInfo();
   }
 
   @override
   Widget build(BuildContext context) {
-
     final Size screenSize = MediaQuery.of(context).size;
     TextEditingController textController = TextEditingController();
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0,20.0,0,0),
+    return Container(
+      color: Colors.white,
+      width: double.infinity,
+      height: double.infinity,
+      padding: const EdgeInsets.all(16.0),
       child: Form(
         key: _formKey,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-              Text('Create Zones',style: TextStyle(fontSize: 30),),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0.0,20.0,0.0,20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.close),
+                    label: const Text('Cancel'),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      Provider.of<UserInterfaceModel>(context, listen: false).showHomeScreen();
+                      Navigator.popUntil(context, ModalRoute.withName('/'));
+                    },
+                  ),
+                ),
+                const Center(
+                  child: Text(
+                    'Create Zones',
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.save),
+                    label: const Text('Save'),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      Provider.of<ZoneNamesModel>(context, listen: false).saveZoneNames();
+                      Navigator.popUntil(context, ModalRoute.withName('/'));
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
                   children: [
-                    SizedBox(
-                      width:screenSize.width/2,
-                      child: TextFormField(
-                          // initialValue: '',
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 20.0),
+                      child: SizedBox(
+                        width: screenSize.width > 600 ? screenSize.width / 2 : double.infinity,
+                        child: TextFormField(
                           controller: textController,
                           decoration: InputDecoration(
-                              suffixIcon: Visibility(
-                                child: IconButton(
-                                    icon: CircleAvatar(
-                                      child:Icon(Icons.add),
-                                      backgroundColor: Colors.blue,
-                                      foregroundColor: Colors.white,
-                                    ),
-                                    iconSize: 50,
-                                    onPressed: () {
-                                      // Validate returns true if the form is valid, or false otherwise.
-                                      if (_formKey.currentState!.validate()) {
-
-                                      }else{
-
-                                      }
-                                    }
-                                ),
+                            suffixIcon: IconButton(
+                              icon: const CircleAvatar(
+                                backgroundColor: Colors.blue,
+                                foregroundColor: Colors.white,
+                                child: Icon(Icons.add),
                               ),
-                              border: OutlineInputBorder(
-                              ),
-                              // icon:Icon(Icons.person),
-                              hintText: 'Enter Name of Zone/Group',
-                              floatingLabelBehavior: FloatingLabelBehavior.always,
-                              labelText: ''
+                              iconSize: 30,
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {}
+                              },
+                            ),
+                            border: const OutlineInputBorder(),
+                            hintText: 'Enter Name of Zone/Group',
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            labelText: '',
                           ),
-                          onChanged: (val){
-                              _zoneName = val;
+                          onChanged: (val) {
+                            _zoneName = val;
                           },
                           validator: (val) {
-                            //
-                            if(val == ''){
+                            if (val == null || val.isEmpty) {
                               return 'Enter a Zone name';
-                            }else{
-                              //Check if  Zones exceeds 8
-                               if( Provider.of<ZoneNamesModel>(context,listen:false).zoneInfoList.length <= 7) {
-                                 Provider.of<ZoneNamesModel>(context,listen:false).zoneInfoList.add(ZoneInfo(zoneID: Provider.of<ZoneNamesModel>(context,listen: false).zoneInfoList.length + 1, zoneName: _zoneName));
-                               }else{
-                                 showAlert();
-                               }
+                            } else {
+                              if (Provider.of<ZoneNamesModel>(context, listen: false)
+                                      .zoneInfoList
+                                      .length <=
+                                  7) {
+                                Provider.of<ZoneNamesModel>(context, listen: false)
+                                    .zoneInfoList
+                                    .add(ZoneInfo(
+                                      zoneID: Provider.of<ZoneNamesModel>(context, listen: false)
+                                              .zoneInfoList
+                                              .length +
+                                          1,
+                                      zoneName: _zoneName,
+                                    ));
+                              } else {
+                                showAlert();
+                              }
                               setState(() {
-                                  textController.clear();
+                                textController.clear();
                               });
                               return null;
                             }
-                          }
+                          },
+                        ),
                       ),
                     ),
-
+                    SizedBox(
+                      width: double.infinity,
+                      child: GridView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 10,
+                        ),
+                        children: Provider.of<ZoneNamesModel>(context)
+                            .zoneInfoList
+                            .map((item) => CardZone(
+                                  zoneID: item.zoneID,
+                                  zoneName: item.zoneName,
+                                ))
+                            .toList(),
+                      ),
+                    ),
                   ],
                 ),
               ),
-            SingleChildScrollView(
-              child: Container(
-                  width: screenSize.width/2,
-                  height: screenSize.height/2,
-                  child:
-                  GridView(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 5,
-                    ),
-                        children:Provider.of<ZoneNamesModel>(context).zoneInfoList.map((item) => CardZone(zoneID:item.zoneID,zoneName: item.zoneName)).toList(),
-                  )
-
-              ),
             ),
-              ElevatedButton.icon(
-                  icon: Icon(Icons.save),
-                  label: Text('Save'),
-                onPressed: (){
-                  Provider.of<ZoneNamesModel>(context,listen: false).saveZoneNames();
-                  Navigator.popUntil(context, ModalRoute.withName('/'));
-                  // Navigator.pop(context);
-                },
-              ),
-
-           ],
-
+          ],
         ),
       ),
     );
   }
 }
-
-
-

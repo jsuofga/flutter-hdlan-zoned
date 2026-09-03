@@ -72,10 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       context: context,
       builder: (context) {
-        final height80vh = MediaQuery.of(context).size.height * 0.8;
+        final height100vh = MediaQuery.of(context).size.height;
 
         return Container(
-          height: height80vh,
+          height: height100vh,
           width: double.infinity,
           color: Colors.white,
           child: Provider.of<UserInterfaceModel>(context).showAdminAccess ? const AdminAccess() : const SettingsMenu(),

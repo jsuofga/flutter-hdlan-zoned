@@ -15,45 +15,48 @@ class SettingsMenu extends StatefulWidget {
 }
 
 class _SettingsMenuState extends State<SettingsMenu> {
- String _model = '';
+  String _model = '';
 
   @override
   void initState() {
     super.initState();
-    Provider.of<ZoneNamesModel>(context,listen: false).getZoneInfo();
-    Provider.of<DisplayInfoModel>(context,listen: false).getDisplayInfo();
+    Provider.of<ZoneNamesModel>(context, listen: false).getZoneInfo();
+    Provider.of<DisplayInfoModel>(context, listen: false).getDisplayInfo();
     _readFromStorage();
   }
+
   //Read from storage
   void _readFromStorage() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _model = prefs.getString('model') ?? 'not detected';
-
     });
   }
 
   void showAlert() {
-    showDialog(context: context, builder: (BuildContext context) {
-      return AlertDialog(
-        title: Row(
-          children: [
-            Icon(Icons.warning,color: Colors.amber,size: 50,),
-            Text("Important"),
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Row(
+            children: [
+              Icon(Icons.warning, color: Colors.amber, size: 50),
+              Text("Important"),
+            ],
+          ),
+          content: const Text("Please re-power Cisco switch before Synchronizing switch"),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Provider.of<UserInterfaceModel>(context, listen: false).showIP();
+                  showPage(const SynchSwitch());
+                },
+                child: const Text("Ok- I will")),
           ],
-        ),
-        content: Text("Please re-power Cisco switch before Synchronizing switch"),
-        actions: [
-          ElevatedButton(
-              onPressed: (){
-                Navigator.pop(context);
-                showPage(SynchSwitch());
-              },
-              child: Text("Ok- I will")),
-        ],
-      );
-
-    });
+        );
+      },
+    );
   }
 
   // Bottom Sheet Modal - Admin and Settings
@@ -67,10 +70,10 @@ class _SettingsMenuState extends State<SettingsMenu> {
       ),
       context: context,
       builder: (context) {
-        final height80vh = MediaQuery.of(context).size.height * 0.8;
+        final height100vh = MediaQuery.of(context).size.height;
 
         return Container(
-          height: height80vh,
+          height: height100vh,
           width: double.infinity,
           color: Colors.white,
           child: _page,
@@ -80,137 +83,135 @@ class _SettingsMenuState extends State<SettingsMenu> {
   }
 
   @override
-    Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center ,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Container(
-                child: SizedBox(
-                  width: 350,
-                  height: 50,
-                  child: ElevatedButton.icon(
-                    onPressed: (){
-                      showAlert();
-                    },
-                    label: Text('Synch Switch'),
-                    icon: Icon(Icons.router),
-                    style: ElevatedButton.styleFrom(
-                      // primary: Colors.green,
-                      textStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
-                      ),
+            child: SizedBox(
+              width: 350,
+              height: 50,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  showAlert();
+                },
+                label: const Text('Synch Switch'),
+                icon: const Icon(Icons.router),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  textStyle: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: _model != 'not detected',
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SizedBox(
+                width: 350,
+                height: 50,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    showPage(const CreateZone());
+                  },
+                  label: const Text('Add Zones'),
+                  icon: const Icon(Icons.workspaces_filled),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    textStyle: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                )),
-          ),
-          Visibility(
-            visible: _model != 'not detected',
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                  child: SizedBox(
-                    width:350,
-                    height: 50,
-                    child: ElevatedButton.icon(
-                      onPressed: (){
-                        Navigator.pop(context);
-                        showPage(CreateZone());
-                        },
-                      label: Text('Add Zones'),
-                      icon: Icon(Icons.workspaces_filled),
-                      style: ElevatedButton.styleFrom(
-                        // primary: Colors.green,
-                        textStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                        ),
-                      ),
-                    ),
-                  )),
+                ),
+              ),
             ),
           ),
           Visibility(
-            visible:  Provider.of<ZoneNamesModel>(context).zoneInfoList.length > 0,
+            visible: Provider.of<ZoneNamesModel>(context).zoneInfoList.isNotEmpty,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Container(
-                  child: SizedBox(
-                    width:350,
-                    height: 50,
-                    child: ElevatedButton.icon(
-                      onPressed: (){
-                        Navigator.pop(context);
-                        showPage(CreateDisplays());
-                                           },
-                      label: Text('Add Displays'),
-                      icon: Icon(Icons.tv),
-                      style: ElevatedButton.styleFrom(
-                        // primary: Colors.green,
-                        textStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                        ),
-                      ),
+              child: SizedBox(
+                width: 350,
+                height: 50,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    showPage(const CreateDisplays());
+                  },
+                  label: const Text('Add Displays'),
+                  icon: const Icon(Icons.tv),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    textStyle: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
                     ),
-                  )),
+                  ),
+                ),
+              ),
             ),
           ),
           Visibility(
             visible: _model != 'not detected',
             child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Container(
-                  child: SizedBox(
-                    width:350,
-                    height: 50,
-                    child: ElevatedButton.icon(
-                      onPressed: (){
-                        Navigator.pop(context);
-                        showPage(CreateVideoSources());
-                      },
-                      label: Text('Add Video Sources'),
-                      icon: Icon(Icons.settings_input_hdmi_outlined),
-                      style: ElevatedButton.styleFrom(
-                        // primary: Colors.green,
-                        textStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                        ),
-                      ),
+              child: SizedBox(
+                width: 350,
+                height: 50,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    showPage(const CreateVideoSources());
+                  },
+                  label: const Text('Add Video Sources'),
+                  icon: const Icon(Icons.settings_input_hdmi_outlined),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    textStyle: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
                     ),
-                  )),
+                  ),
+                ),
+              ),
             ),
           ),
-
-
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Container(
-                child: SizedBox(
-                  width:350,
-                  height: 50,
-                  child: ElevatedButton.icon(
-                    onPressed: (){
-                      Provider.of<UserInterfaceModel>(context,listen: false).hideSelectSettingsMenu();
-                      Navigator.pop(context);
-                    },
-                    label: Text('CANCEL'),
-                    icon: Icon(Icons.cancel),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      textStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
-                      ),
-                    ),
+            child: SizedBox(
+              width: 350,
+              height: 50,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Provider.of<UserInterfaceModel>(context, listen: false)
+                      .hideSelectSettingsMenu();
+                  Navigator.pop(context);
+                },
+                label: const Text('CANCEL'),
+                icon: const Icon(Icons.cancel),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  textStyle: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
                   ),
-                )),
+                ),
+              ),
+            ),
           ),
-
         ],
       ),
     );

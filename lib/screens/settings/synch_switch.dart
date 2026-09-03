@@ -54,66 +54,95 @@ class _SynchSwitchState extends State<SynchSwitch> {
       width: double.infinity,
       height: double.infinity,
       padding: const EdgeInsets.all(16.0),
-      child: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Visibility(
-                visible: Provider.of<UserInterfaceModel>(context).showIPform,
-                child: const IpEntryForm(),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Visibility(
+              visible: Provider.of<UserInterfaceModel>(context).showIPform,
+              child: const IpEntryForm(),
+            ),
+            Visibility(
+              visible: !Provider.of<UserInterfaceModel>(context).showIPform &&
+                  !Provider.of<SnmpModel>(context).showSpinner,
+              child: Text(
+                Provider.of<SnmpModel>(context).model,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 20, color: Colors.black),
               ),
-              Visibility(
-                visible: !Provider.of<UserInterfaceModel>(context).showIPform &&
-                    !Provider.of<SnmpModel>(context).showSpinner,
-                child: Text(
-                  Provider.of<SnmpModel>(context).model,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 20, color: Colors.black),
+            ),
+            Visibility(
+              visible: !Provider.of<UserInterfaceModel>(context).showIPform &&
+                  !Provider.of<SnmpModel>(context).showSpinner,
+              child: showNetworkSwitch(),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Visibility(
+                visible: Provider.of<SnmpModel>(context).showSpinner,
+                child: const SpinKitWave(
+                  color: Colors.blue,
+                  size: 50.0,
                 ),
               ),
-              Visibility(
-                visible: !Provider.of<UserInterfaceModel>(context).showIPform &&
-                    !Provider.of<SnmpModel>(context).showSpinner,
-                child: showNetworkSwitch(),
+            ),
+            Visibility(
+              visible: Provider.of<SnmpModel>(context).showSpinner,
+              child: Text(
+                'Scanning Network Switch | ${Provider.of<SnmpModel>(context).ipAddress}',
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.black),
               ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Visibility(
-                  visible: Provider.of<SnmpModel>(context).showSpinner,
-                  child: const SpinKitWave(
-                    color: Colors.blue,
-                    size: 50.0,
+            ),
+            Visibility(
+              visible: !Provider.of<UserInterfaceModel>(context).showIPform &&
+                  Provider.of<SnmpModel>(context)
+                      .model
+                      .contains('No Compatible Network Switch Found') &&
+                  !Provider.of<SnmpModel>(context).showSpinner,
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: Center(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Provider.of<UserInterfaceModel>(context, listen: false)
+                            .showIP();
+                      },
+                      label: const Text('Exit'),
+                      icon: const Icon(Icons.exit_to_app),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        textStyle: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-              Visibility(
-                visible: Provider.of<SnmpModel>(context).showSpinner,
-                child: Text(
-                  'Scanning Network Switch | ${Provider.of<SnmpModel>(context).ipAddress}',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.black),
-                ),
-              ),
-              Visibility(
-                visible: !Provider.of<UserInterfaceModel>(context).showIPform &&
-                    Provider.of<SnmpModel>(context)
-                        .model
-                        .contains('No Compatible Network Switch Found') &&
-                    !Provider.of<SnmpModel>(context).showSpinner,
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Center(
-                    child: SizedBox(
-                      width: double.infinity,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Visibility(
+                  visible: !Provider.of<UserInterfaceModel>(context).showIPform &&
+                      Provider.of<SnmpModel>(context).model !=
+                          'No Compatible Network Switch Found' &&
+                      !Provider.of<SnmpModel>(context).showSpinner,
+                  child: Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          Provider.of<UserInterfaceModel>(context, listen: false)
-                              .showIP();
+                          Navigator.pop(context);
                         },
-                        label: const Text('Exit'),
-                        icon: const Icon(Icons.exit_to_app),
+                        label: const Text('Cancel'),
+                        icon: const Icon(Icons.error),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -126,71 +155,40 @@ class _SynchSwitchState extends State<SynchSwitch> {
                     ),
                   ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Visibility(
-                    visible: !Provider.of<UserInterfaceModel>(context).showIPform &&
-                        Provider.of<SnmpModel>(context).model !=
-                            'No Compatible Network Switch Found' &&
-                        !Provider.of<SnmpModel>(context).showSpinner,
-                    child: Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          label: const Text('Cancel'),
-                          icon: const Icon(Icons.error),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            textStyle: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                            ),
+                Visibility(
+                  visible: !Provider.of<UserInterfaceModel>(context).showIPform &&
+                      Provider.of<SnmpModel>(context).model !=
+                          'No Compatible Network Switch Found' &&
+                      !Provider.of<SnmpModel>(context).showSpinner,
+                  child: Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Provider.of<UserInterfaceModel>(context, listen: false)
+                              .showIP();
+                          Provider.of<SnmpModel>(context, listen: false)
+                              .saveTxRxCount();
+                          Navigator.popUntil(
+                              context, ModalRoute.withName('/'));
+                        },
+                        label: const Text('Save'),
+                        icon: const Icon(Icons.exit_to_app),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          textStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  Visibility(
-                    visible: !Provider.of<UserInterfaceModel>(context).showIPform &&
-                        Provider.of<SnmpModel>(context).model !=
-                            'No Compatible Network Switch Found' &&
-                        !Provider.of<SnmpModel>(context).showSpinner,
-                    child: Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            Provider.of<UserInterfaceModel>(context, listen: false)
-                                .showIP();
-                            Provider.of<SnmpModel>(context, listen: false)
-                                .saveTxRxCount();
-                            Navigator.popUntil(
-                                context, ModalRoute.withName('/'));
-                          },
-                          label: const Text('Save'),
-                          icon: const Icon(Icons.exit_to_app),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            textStyle: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
