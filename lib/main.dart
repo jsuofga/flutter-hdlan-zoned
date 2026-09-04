@@ -184,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         backgroundColor: Color(0xFF2c3e50),
         actions: [
-          Text('TroipacBar1Bar2'),
+          Text('TullariHook'),
           TextButton.icon(
               onPressed: () {
                  Provider.of<UserInterfaceModel>(context,listen: false).showAdmin();
