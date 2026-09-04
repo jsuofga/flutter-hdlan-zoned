@@ -14,16 +14,61 @@ class UserInterfaceModel extends ChangeNotifier {
   bool showIPform = true;
   bool showHome = true;
   int zoneToShow = 0;
+  int allowedZone = 0;
 
-  //Methods
-  setZoneToShow (_zone){
-    showHome = false;
-    zoneToShow = _zone;
+  // Set assigned tablet zone control from Settings
+  setAllowedZone (int zone) async {
+    allowedZone = zone;
+    if (zone == 0) {
+      showHome = true;
+      zoneToShow = 0;
+    } else {
+      showHome = false;
+      zoneToShow = zone;
+    }
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('allowedZone', zone);
+    await prefs.setInt('zoneToShow', zoneToShow);
+  }
+
+  // Set active zone view
+  setZoneToShow (int zone) async {
+    if (zone == 0) {
+      showHome = true;
+      zoneToShow = 0;
+    } else {
+      showHome = false;
+      zoneToShow = zone;
+    }
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('zoneToShow', zone);
+  }
+
+  getZoneToShow() async {
+    final prefs = await SharedPreferences.getInstance();
+    allowedZone = prefs.getInt('allowedZone') ?? 0;
+    zoneToShow = prefs.getInt('zoneToShow') ?? allowedZone;
+    if (allowedZone > 0) {
+      showHome = false;
+      zoneToShow = allowedZone;
+    } else if (zoneToShow == 0) {
+      showHome = true;
+    } else {
+      showHome = false;
+    }
     notifyListeners();
   }
-  showHomeScreen() {
-    showHome = true;
-    notifyListeners();
+
+  showHomeScreen() async {
+    if (allowedZone == 0) {
+      showHome = true;
+      zoneToShow = 0;
+      notifyListeners();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('zoneToShow', 0);
+    }
   }
   showAdmin() {
     showAdminAccess = true;

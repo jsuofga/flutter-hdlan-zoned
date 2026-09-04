@@ -57,7 +57,12 @@ class _ButtonTVState extends State<ButtonTV> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    String _vlanMembership = Provider.of<SnmpModel>(context).vlanMembership[_txCount + widget.rxID -1];
+    final snmpModel = Provider.of<SnmpModel>(context);
+    final int targetIndex = _txCount + widget.rxID - 1;
+    String _vlanMembership = '1';
+    if (snmpModel.vlanMembership.isNotEmpty && targetIndex >= 0 && targetIndex < snmpModel.vlanMembership.length) {
+      _vlanMembership = snmpModel.vlanMembership[targetIndex];
+    }
     return Column(
       children: [
         Padding(

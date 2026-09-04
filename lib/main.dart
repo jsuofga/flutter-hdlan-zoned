@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     Provider.of<SnmpModel>(context,listen: false).startPoll();
+    Provider.of<UserInterfaceModel>(context, listen: false).getZoneToShow();
   }
 
   // Bottom Sheet Modal - Admin and Settings
@@ -183,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         backgroundColor: Color(0xFF2c3e50),
         actions: [
-          Text('V9.03.26'),
+          Text('TroipacBar1Bar2'),
           TextButton.icon(
               onPressed: () {
                  Provider.of<UserInterfaceModel>(context,listen: false).showAdmin();
@@ -307,13 +308,17 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
 
-            // CENTER HOME BUTTON
-            Center(
-              child: IconButton(
-                icon: Icon(Icons.workspaces_filled, size: 36, color: Colors.white),
-                onPressed: () {
-                  Provider.of<UserInterfaceModel>(context, listen: false).showHomeScreen();
-                },
+            // CENTER HOME BUTTON (Only shown if ALL Zones is selected in Settings, i.e. allowedZone == 0)
+            Visibility(
+              visible: Provider.of<UserInterfaceModel>(context).allowedZone == 0,
+              child: Center(
+                child: IconButton(
+                  icon: const Icon(Icons.workspaces_filled, size: 36, color: Colors.white),
+                  onPressed: () {
+                    Provider.of<UserInterfaceModel>(context, listen: false).showHomeScreen();
+                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                  },
+                ),
               ),
             ),
 

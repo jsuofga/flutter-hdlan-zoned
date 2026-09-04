@@ -40,9 +40,9 @@ class _VideoInputButtonState extends State<VideoInputButton> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.all(50.0),
+      padding: const EdgeInsets.all(20.0),
       child: SizedBox(
-        width: screenSize.width/10,
+        width: screenSize.width/8,
         child: TextButton.icon(
           icon: Icon(Icons.input,
             color: Colors.black45,

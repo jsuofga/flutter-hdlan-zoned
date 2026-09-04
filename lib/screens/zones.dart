@@ -6,12 +6,12 @@ import 'package:provider/provider.dart';
 import 'package:hdlan_controller/provider_model.dart';
 
 class Zones extends StatefulWidget {
-  const Zones ({Key? key}) : super(key: key);
+  const Zones({Key? key}) : super(key: key);
   @override
-  _Zones  createState() => _Zones ();
+  _Zones createState() => _Zones();
 }
 
-class _Zones  extends State<Zones> {
+class _Zones extends State<Zones> {
   // Bottom Sheet Modal - Admin and Settings
   void showVideoSelectPanel() {
     showModalBottomSheet(
@@ -33,46 +33,59 @@ class _Zones  extends State<Zones> {
     );
   }
 
+  @override
   void initState() {
     super.initState();
-    Provider.of<DisplayInfoModel>(context,listen: false).getDisplayInfo();
-
+    Provider.of<DisplayInfoModel>(context, listen: false).getDisplayInfo();
   }
+
   @override
   Widget build(BuildContext context) {
+    final zoneList = Provider.of<ZoneNamesModel>(context).zoneInfoList;
+    final int zoneToShow = Provider.of<UserInterfaceModel>(context).zoneToShow;
 
-     int _zoneIndex = Provider.of<UserInterfaceModel>(context).zoneToShow - 1;
-     List _allDisplays = Provider.of<DisplayInfoModel>(context).displayInfoList;
-     List _displaysInThisZone= _allDisplays.where((item) => item.zoneID == _zoneIndex+1 ).toList();
+    if (zoneList.isEmpty) {
+      return const Center(
+        child: Text('No Zones Available', style: TextStyle(color: Colors.white, fontSize: 24)),
+      );
+    }
+
+    int safeZoneIndex = (zoneToShow - 1).clamp(0, zoneList.length - 1);
+    final String currentZoneName = zoneList[safeZoneIndex].zoneName;
+    List _allDisplays = Provider.of<DisplayInfoModel>(context).displayInfoList;
+    List _displaysInThisZone = _allDisplays.where((item) => item.zoneID == safeZoneIndex + 1).toList();
+
     return Column(
-        mainAxisAlignment: MainAxisAlignment.center ,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                 // child: Text('${Provider.of<ZoneNamesModel>(context).zoneInfoList[_zoneIndex].zoneName}', style:TextStyle(color:Colors.white,fontSize: 50),),
-                 child: ElevatedButton(
-                   style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF2c3e50)),
-                   child:Text('${Provider.of<ZoneNamesModel>(context).zoneInfoList[_zoneIndex].zoneName}', style:TextStyle(color:Colors.white,fontSize: 40)),
-                   onPressed: (){
-                     showVideoSelectPanel();
-                     Provider.of<SwitchingModel>(context,listen:false).selectZone(_zoneIndex+1);
-
-                   },
-                 ),
-
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2c3e50)),
+                child: Text(
+                  currentZoneName,
+                  style: const TextStyle(color: Colors.white, fontSize: 40),
+                ),
+                onPressed: () {
+                  showVideoSelectPanel();
+                  Provider.of<SwitchingModel>(context, listen: false).selectZone(safeZoneIndex + 1);
+                },
               ),
-            ],
-          ),
-
-          Wrap(
-            children:_displaysInThisZone.map((item) => ButtonTV(rxID:item.rxID,displayName: item.displayName,)).toList(),
-          )
-        ],
-
+            ),
+          ],
+        ),
+        Wrap(
+          children: _displaysInThisZone
+              .map((item) => ButtonTV(
+                    rxID: item.rxID,
+                    displayName: item.displayName,
+                  ))
+              .toList(),
+        )
+      ],
     );
   }
 }
-
