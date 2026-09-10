@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
 
         ),
-        home: const MyHomePage(title: 'Octava HDLAN Controller'),
+        home: const MyHomePage(title: 'Octava AVLAN Controller'),
       ),
     );
   }
@@ -184,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         backgroundColor: Color(0xFF2c3e50),
         actions: [
-          Text('TullariHook|1.1'),
+          Text('TullariHook|1.2'),
           TextButton.icon(
               onPressed: () {
                  Provider.of<UserInterfaceModel>(context,listen: false).showAdmin();
@@ -214,6 +214,7 @@ class _MyHomePageState extends State<MyHomePage> {
               left: 8,
               child: Row(
                 children: [
+                  /*
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: Colors.red, width: 2), // green outline                      foregroundColor: Colors.white,
@@ -297,6 +298,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontWeight: FontWeight.bold,
                     ),),
                   ),
+                  */
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Text(
