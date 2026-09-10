@@ -58,10 +58,19 @@ class _ButtonTVState extends State<ButtonTV> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     final snmpModel = Provider.of<SnmpModel>(context);
+    final sourceModel = Provider.of<SourceNamesModel>(context);
+
     final int targetIndex = _txCount + widget.rxID - 1;
     String _vlanMembership = '1';
     if (snmpModel.vlanMembership.isNotEmpty && targetIndex >= 0 && targetIndex < snmpModel.vlanMembership.length) {
       _vlanMembership = snmpModel.vlanMembership[targetIndex];
+    }
+
+    final int vlanNum = int.tryParse(_vlanMembership) ?? 1;
+    final int sourceIndex = vlanNum - 2;
+    String sourceName = '';
+    if (sourceIndex >= 0 && sourceIndex < sourceModel.sourceInfoList.length) {
+      sourceName = sourceModel.sourceInfoList[sourceIndex].sourceName;
     }
     return Column(
       children: [
@@ -95,9 +104,7 @@ class _ButtonTVState extends State<ButtonTV> {
           )
         ),
         // FeedBack
-        //   Text('${Provider.of<SourceNamesModel>(context).sourceInfoList[int.parse(_vlanMembership)-2].sourceName}',style:TextStyle(color:Colors.white))
-            Text('${Provider.of<SourceNamesModel>(context).sourceInfoList.length> 0 ? Provider.of<SourceNamesModel>(context).sourceInfoList[int.parse(_vlanMembership)-2].sourceName :''}',
-                  style:TextStyle(color:Colors.white))
+        Text(sourceName, style: const TextStyle(color: Colors.white)),
       //
 
       ],
